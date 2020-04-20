@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+    <script src = "/static/polls/myScript.js" ></script>
+    <script src="/static/polls/jquery-3.4.1.min.js"></script>
+    <script>
+        function getTomData(){
+            var param = {
+                name: "Tom",
+                age: "19"
+            };
+            
+            $.get("data", param, updateText(data){
+                document.getElementById("tom").innerHTML = data
+            });
+        }
+    </script>
+</head>
+
+<h2>External JavaScript</h2>
+
+<p id="demo">A Paragraph.</p>
+
+<p id="tom">Information about Tom will appear here</p>
+
+<button onclick = "loadData()">Click here to get data about Tom</button>
+
+<button onclick="myFunction()">Try it</button>
+
+<p>(myFunction is stored in an external file called "myScript.js")</p>
+
+
+
+</body>
+</html>

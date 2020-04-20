@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The pickle barrel</title>
+    <script src = "/static/polls/jQuery.js" ></script>
+    <script>
+        function changeItem(){
+            var par = {price : 10, model:"lexus nx 200"}
+
+            $.post('/polls/newItem', par, function changeMenu(data){
+                document.getElementById("item1").innerHTML = data.name
+                document.getElementById("item2").innerHTML = data.price
+
+            }, "json")
+        }
+    </script>
+    <script>
+        function getHappinessScore(){
+
+            $.get('/polls/calculateHappiness', function displayHappiness(data){
+                
+                var obj = JSON.parse(data)
+                var para = document.createElement("p")
+                var node = document.createTextNode("Your happiness score is " + obj.score )
+                para.append(node)
+
+                var happinessBlock = document.getElementById("happiness")
+                happinessBlock.append(para)
+            })
+        }
+    </script>
+</head>
+<body>
+    <h1>Today's Menu</h1>
+    <ul>
+        <li id="item1">Hamburger</li>
+        <li id="item2">Spicy Pizza from Hell</li>
+    </ul>
+
+    <div id = 'happiness'>
+        <p><br><br><br></p>
+        <h1 style = 'color: darkorange;'>Welcome to the Happiness App, click the button below to see your happiness score</h1>
+        <button onclick="getHappinessScore()">Get Happiness Score</button>
+    </div>
+    <button onclick = changeItem()> Click here for new menu </button>
+</body>
+
+
+</html>

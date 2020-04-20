@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+        <script src = "/static/polls/jQuery.js" ></script>
+        <script src = "/static/polls/drawBubbles.js" ></script>
+        <script src = "/static/polls/two.js"></script>
+        <script>
+            function getHappinessScore(){
+    
+                $.get('/polls/calculateHappiness', function displayHappiness(data){
+                    
+                    var obj = JSON.parse(data)
+                    var para = document.createElement("p")
+                    var node = document.createTextNode("Your happiness score is " + obj.score )
+                    para.append(node)
+    
+                    var happinessBlock = document.getElementById("happiness")
+                    happinessBlock.append(para)
+                })
+            }
+
+            function goToDataEntryPage(){
+                window.location.href = '/polls/dataEntry';
+            }
+
+            function happinessBubbles(){
+                $.get('/polls/bubbles', function displayBubbles(data){
+                    var indicators = JSON.parse(data)
+                    drawBubbles(indicators)
+                })
+        }
+        </script>
+        <style>
+            #bubbles {
+                height: 1000px;
+                margin: auto;
+                width: 50%;
+                padding: 10px;
+}
+        </style>
+    </head>
+    <body>
+        <div id = 'happiness'>
+            <p><br><br><br></p>
+            <h1 style="color: darkorange;">Welcome {{name}}, to your Happiness Home</h1>
+            <button onclick="getHappinessScore()", style="display:none">Get Happiness Score</button>
+        </div>
+        <button onclick = "goToDataEntryPage()"> Click here to enter today's Happiness data </button>
+        <br><br>
+
+        <button onclick="happinessBubbles()">Load bubbles</button>
+        <br><br>
+        <div id="bubbles"></div>
+    
+
+
+    </body>
+</html>

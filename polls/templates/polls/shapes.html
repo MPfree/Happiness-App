@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shapes</title>
+        <script src = "/static/polls/two.js" ></script>
+        <script src = "/static/polls/drawBubbles.js" ></script>
+    </head>
+    <body>
+        <div id="draw-shapes"></div>
+        <script>
+            var elem = document.getElementById('draw-shapes');
+            var params = { width: 600, height: 600 };
+            var two = new Two(params).appendTo(elem);
+
+            // two has convenience methods to create shapes.
+            var circle1 = two.makeCircle(72, 100, 50);
+            var rect = two.makeRectangle(172, 100, 100, 100);
+            var circle2 = two.makeCircle(272,300,50)
+
+            two.makeText('YESSIR', 72, 100)
+            two.makeText('WEEZY', 272, 300)
+
+            // The object returned has many stylable properties:
+            circle1.fill = '#FF8000';
+            circle1.stroke = 'orangered'; // Accepts all valid css color
+            circle1.linewidth = 5;
+
+            circle2.fill = '#FF8000';
+            circle2.stroke = 'orangered'; // Accepts all valid css color
+            circle2.linewidth = 5;
+
+            rect.fill = 'rgb(0, 200, 255)';
+            rect.opacity = 0.75;
+            rect.noStroke();
+
+            // Don't forget to tell two to render everything
+            // to the screen
+            two.update();
+        </script>
+    </body>
+</html>

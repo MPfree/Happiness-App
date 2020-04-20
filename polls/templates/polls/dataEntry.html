@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Enter Data</title>
+    </head>
+    <body>
+        <h1>Enter da data</h1>
+        <form action="/polls/dataEntry" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

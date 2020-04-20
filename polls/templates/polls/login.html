@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Happiness log in</title>
+    </head>
+    <body>
+        <h1 style="color: darkorange;", style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+        ;">Welcome to your Happiness Journey</h1>
+        <form action="/polls/validateLogin", method="POST">
+            {% csrf_token %}
+            
+            <fieldset>
+            <legend>Enter credentials</legend>
+            <label for="un">Username</label><br>
+            <input type="text", name="username", id="un"><br><br>
+            <label for="pw">Password</label><br>
+            <input type="password", name='password', id='pw'><br><br>
+            <input type="submit", value="Log in">
+        </fieldset>
+        </form>
+    </body>
+</html>
