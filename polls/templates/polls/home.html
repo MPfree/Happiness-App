@@ -2,9 +2,14 @@
 <html>
     <head>
         <title>Home</title>
-        <script src = "/static/polls/jQuery.js" ></script>
-        <script src = "/static/polls/drawBubbles.js" ></script>
-        <script src = "/static/polls/two.js"></script>
+        {% load static %}
+        <script src = "{% static 'polls/drawBubbles.js' %}" ></script>
+        <script src = "{% static 'polls/jQuery.js' %}" ></script>
+        <script src = "{% static 'polls/two.js' %}"></script>
+
+        <link rel="stylesheet" type="text/css" href= "{% static 'polls/semantic/dist/semantic.min.css' %}">
+        <script src= "{% static 'polls/semantic/dist/semantic.min.js' %}"></script>
+
         <script>
             function getHappinessScore(){
     
@@ -24,34 +29,119 @@
                 window.location.href = '/polls/dataEntry';
             }
 
-            function happinessBubbles(){
-                $.get('/polls/bubbles', function displayBubbles(data){
+            function happinessBubbles(period){
+                var period_filter = {period_name:period}
+                $.get('/polls/bubbles', period_filter,function displayBubbles(data){
                     var indicators = JSON.parse(data)
-                    drawBubbles(indicators)
+                    var count = Object.keys(indicators).length
+                    if (count==0){
+                        document.getElementById("bubbles").innerHTML="You have no happiness records in this time period"
+                    }
+                    else{
+                        drawBubbles(indicators)
+                    }
+
+                    
                 })
-        }
+            }
+            function changeButton(){
+                document.getElementById("broken").innerHTML = "dis is broken"
+            }
         </script>
         <style>
-            #bubbles {
-                height: 1000px;
-                margin: auto;
-                width: 50%;
-                padding: 10px;
-}
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #layout{
+                height: 80%;
+            }
+            
+
+            #background{
+                
+                background-image: url("{% static 'polls/images/sunnyday.jpg' %}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                border-radius: 0.5em;
+            }
+            #recordhappiness{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 40%;
+            }
+            #bubblefilters{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 60%;
+            }
+            #bubblerow{
+                height: 80%;
+            }
+
+            #bubblecolumn{
+                height:100%;
+            }
         </style>
     </head>
-    <body>
-        <div id = 'happiness'>
-            <p><br><br><br></p>
-            <h1 style="color: darkorange;">Welcome {{name}}, to your Happiness Home</h1>
-            <button onclick="getHappinessScore()", style="display:none">Get Happiness Score</button>
-        </div>
-        <button onclick = "goToDataEntryPage()"> Click here to enter today's Happiness data </button>
-        <br><br>
+    <body onload="happinessBubbles('alltime')">
 
-        <button onclick="happinessBubbles()">Load bubbles</button>
-        <br><br>
-        <div id="bubbles"></div>
+
+        <h1 class="ui orange center aligned header">Welcome {{name}}, to your Happiness Home</h1>
+
+        <hr><br><br>
+        
+
+
+        <!--Grid begins-->
+        <div id="layout" class="ui two column centered grid">
+            <div class="two column centered row">
+                <div class="column">
+                    <div id="background">
+                        <button id="recordhappiness" class="ui circular button orange large" onclick = "goToDataEntryPage()">Record today's happiness</button>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+            <div id="bubblerow" class="one column row">
+                <div id="bubblecolumn" class="column">
+                    <div style="height: 100%;" id="bubbles"></div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="two column centered row">
+                <div class="column">
+                    <div id="bubblefilters" class="ui buttons">
+                        <button onclick="happinessBubbles('alltime')" class="ui button">All time</button>
+                        <button onclick="happinessBubbles('yesterday')" class="ui button">Yesterday</button>
+                        <button onclick="happinessBubbles('pastweek')" class="ui button">Past week</button>
+                        <button onclick="happinessBubbles('pastmonth')" class="ui button">Past month</button>
+                        <button onclick="happinessBubbles('pastyear')" class="ui button">Past year</button>
+                    </div>
+                </div>
+            
+            </div>
+
+        </div>
+
+  
+
+
+ 
+
+
+
+        <!--Grind ends-->
     
 
 

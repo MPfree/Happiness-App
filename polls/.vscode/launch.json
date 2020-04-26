@@ -12,7 +12,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "program": "/home/tom/Documents/mysite/manage.py",
+            "program": "/home/tom/Documents/Happiness App/Happiness-App/manage.py",
             "args": [
                 "runserver",
                 "--noreload"

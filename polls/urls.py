@@ -11,6 +11,7 @@ urlpatterns = [
     path('validateLogin', views.validateLogin, name='validateLogin'),
     path('dataEntry', views.dataEntry, name='dataEntry'),
     path('bubbles', views.bubbles, name='bubbles'),
-    path('shapes', views.shapes, name='shapes')
+    path('shapes', views.shapes, name='shapes'),
+    path('semantic', views.semantic, name='semantic')
     
 ]

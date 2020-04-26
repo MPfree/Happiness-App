@@ -18,8 +18,9 @@ import MySQLdb
 import numpy as np
 from .models import UserInformation, UserHappinessData
 from .forms import HappinessForm
-from datetime import datetime
+import datetime
 from .indicator_averages import indicator_averages
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -62,13 +63,18 @@ def calculateHappiness(request):
 def validateLogin(request):
 
     if request.method == 'POST':
+
        submitted_username = request.POST.get('username')
        submitted_password = request.POST.get('password')
+
        user = get_object_or_404(UserInformation.objects.filter(username= submitted_username))
+
        if(user.password == submitted_password):
            context = {"name" : user.name}
            request.session['id'] = user.id
+
            print(type(user.id))
+
            return render(request, 'polls/home.html', context)
  
        return render(request, 'polls/login.html')
@@ -84,7 +90,6 @@ def dataEntry(request):
             happiness = UserHappinessData(**happinessData)
             happiness.user_id=request.session['id']
             happiness.save()
-
             return render(request, 'polls/home.html')
 
 
@@ -94,10 +99,34 @@ def dataEntry(request):
     return render(request, 'polls/dataEntry.html', {"form": form})
 
 def bubbles(request):
-    days=UserHappinessData.objects.filter(user=request.session["id"]).values("sleep", "exercise", "social", "metime", "weather", "socialmedia", "happy")
+    period = request.GET.get("period_name")
+    todays_date = datetime.date.today()
+    date_delta = None
+
+    if period == 'alltime':
+        date_delta = relativedelta(years=1000)
+    if period == 'yesterday':
+        date_delta = datetime.timedelta(days=1)
+    if period == 'pastweek':
+        date_delta = datetime.timedelta(days=7)
+    if period == 'pastmonth':
+        date_delta = relativedelta(months=1)
+    if period == 'pastyear':
+        date_delta = relativedelta(years=1)
+    
+    date_filter = (todays_date - date_delta).strftime('%Y-%m-%d')
+
+    
+    days=UserHappinessData.objects.filter(user=request.session["id"], date__gte=date_filter).values("sleep", "exercise", "social", "metime", "weather", "socialmedia", "happy")
     indicators = indicator_averages(days)
-    context_json = json.dumps(indicators)
-    return JsonResponse(context_json, safe=False)
+    if len(indicators)==0:
+        return JsonResponse('{}', safe=False)
+    else:
+        context_json = json.dumps(indicators)
+        return JsonResponse(context_json, safe=False)
     
 def shapes(request):
     return render(request, 'polls/shapes.html')
+
+def semantic(request):
+    return render(request, 'polls/semantic_practice.html')
